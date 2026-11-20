@@ -1,0 +1,4 @@
+# Merge by target /app/data: BOTH API nodes must use the same coherent filesystem.
+services:
+  api:
+    volumes: ['${ECHAT_SHARED_MEDIA:?Mount the shared filesystem before starting API}:/app/data']

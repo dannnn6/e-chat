@@ -1,0 +1,38 @@
+{
+  "prepared_on": "2026-09-25",
+  "status": "pilot_source_not_production_release",
+  "echat": {
+    "server_tests": {
+      "passed": 17,
+      "backend": "SQLite via TestClient"
+    },
+    "webcrypto_tests_included_in_17": 2,
+    "http_development_server_smoke": "passed",
+    "static_http_resources": 7,
+    "browser_e2e": "blocked_by_environment_before_registration",
+    "postgresql": "not_executed",
+    "docker_deployment": "not_executed",
+    "real_edge_network": "not_executed",
+    "native_app": "not_implemented",
+    "e2ee": "not_implemented",
+    "background_web_push": "not_implemented"
+  },
+  "vkh": {
+    "original_files_byte_identical": 209,
+    "changed_original_files": 8,
+    "new_native_files": 16,
+    "kotlin_psi_syntax": {
+      "files": 23,
+      "syntax_errors": 0,
+      "is_type_or_build_check": false
+    },
+    "native_build": "blocked_at_Gradle_download_DNS_failure",
+    "apk_msi_created": false,
+    "new_php_lint": "passed",
+    "real_mysql_dpop_fcm": "not_executed",
+    "isolated_mysql_test_fixture": "supplied_not_executed",
+    "guarded_patch_smoke": "passed",
+    "regression_on_devices": "not_executed"
+  },
+  "scope": "Tests do not establish production readiness, security certification, Telegram parity or universal network availability."
+}

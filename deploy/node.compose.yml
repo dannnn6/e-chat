@@ -1,0 +1,23 @@
+# A second API node, NOT a separate independent/federated E-chat server.
+# Run from repository root: docker compose --env-file deploy/node.env -f deploy/node.compose.yml up -d --build
+name: echat-node
+services:
+  api:
+    build: ..
+    image: echat-local:0.1.0-pilot
+    # Shared storage must be mounted before every start, including after reboot.
+    restart: "no"
+    init: true
+    environment:
+      ECHAT_DATABASE_URL: ${ECHAT_DATABASE_URL:?Set shared PostgreSQL DSN in node.env}
+      ECHAT_DATA_KEY: ${ECHAT_DATA_KEY:?Must match the first node}
+      ECHAT_PUBLIC_ORIGIN: ${ECHAT_PUBLIC_ORIGIN:?Must match the public hostname}
+      ECHAT_REGISTRATION_TOKEN: ${ECHAT_REGISTRATION_TOKEN:-}
+      ECHAT_DATA_DIR: /app/data
+    command: [python, -m, uvicorn, 'echat.app:create_app', --factory, --host, 0.0.0.0, --port, '8080', --workers, '2', --limit-concurrency, '256', --timeout-keep-alive, '45', --proxy-headers, --forwarded-allow-ips, '${ECHAT_TRUSTED_PROXIES:-127.0.0.1}', --no-access-log]
+    ports: ['${ECHAT_NODE_BIND:?Set the WireGuard or private interface IP}:3080:8080']
+    volumes: ['${ECHAT_SHARED_MEDIA:?Mount the same shared media filesystem first}:/app/data']
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]

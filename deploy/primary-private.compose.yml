@@ -1,0 +1,5 @@
+# Optional override on the PRIMARY host, only after WireGuard/private networking exists.
+# docker compose -f compose.yml -f deploy/primary-private.compose.yml up -d db
+services:
+  db:
+    ports: ['${ECHAT_PRIMARY_PRIVATE_IP:?Set the primary WireGuard/private IP}:5432:5432']

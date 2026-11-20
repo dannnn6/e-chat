@@ -1,0 +1,8 @@
+{$ECHAT_HOST} {
+    encode zstd gzip
+    request_body {
+        max_size 320KB
+    }
+    reverse_proxy api:8080
+    header Strict-Transport-Security "max-age=31536000"
+}

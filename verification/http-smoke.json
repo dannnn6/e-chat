@@ -1,0 +1,54 @@
+[
+  {
+    "check": "dev.py HTTP readiness on loopback, real uvicorn + SQLite",
+    "status": "pass",
+    "body": {
+      "ok": true
+    }
+  },
+  {
+    "check": "HTTP static /",
+    "status": "pass",
+    "bytes": 5102,
+    "type": "text/html; charset=utf-8"
+  },
+  {
+    "check": "HTTP static /app.js",
+    "status": "pass",
+    "bytes": 40200,
+    "type": "text/javascript; charset=utf-8"
+  },
+  {
+    "check": "HTTP static /app.css",
+    "status": "pass",
+    "bytes": 8517,
+    "type": "text/css; charset=utf-8"
+  },
+  {
+    "check": "HTTP static /manifest.webmanifest",
+    "status": "pass",
+    "bytes": 585,
+    "type": "application/manifest+json"
+  },
+  {
+    "check": "HTTP static /icon-192.png",
+    "status": "pass",
+    "bytes": 2976,
+    "type": "image/png"
+  },
+  {
+    "check": "HTTP static /icon-512.png",
+    "status": "pass",
+    "bytes": 8951,
+    "type": "image/png"
+  },
+  {
+    "check": "HTTP static /sw.js",
+    "status": "pass",
+    "bytes": 980,
+    "type": "text/javascript; charset=utf-8"
+  },
+  {
+    "note": "HTTP/static smoke only. Browser interactions, PostgreSQL and Docker remain unverified."
+  }
+]

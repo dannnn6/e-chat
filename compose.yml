@@ -1,0 +1,61 @@
+name: ${COMPOSE_PROJECT_NAME:-echat}
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: echat
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/init.py first}
+      ECHAT_DB_PASSWORD: ${ECHAT_DB_PASSWORD:?Run scripts/init.py first}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/postgres-init.sh:/docker-entrypoint-initdb.d/10-echat.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -h 127.0.0.1 -U postgres -d echat"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [private]
+  api:
+    build: .
+    image: echat-local:0.1.0-pilot
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 40s
+    environment:
+      ECHAT_DATABASE_URL: postgresql+psycopg://echat:${ECHAT_DB_PASSWORD:?Run scripts/init.py first}@db:5432/echat
+      ECHAT_DATA_KEY: ${ECHAT_DATA_KEY:?Run scripts/init.py first}
+      ECHAT_PUBLIC_ORIGIN: ${ECHAT_PUBLIC_ORIGIN:?Run scripts/init.py first}
+      ECHAT_REGISTRATION_TOKEN: ${ECHAT_REGISTRATION_TOKEN:-}
+      ECHAT_DATA_DIR: /app/data
+    command: [python, -m, uvicorn, "echat.app:create_app", --factory, --host, 0.0.0.0, --port, '8080', --workers, '${ECHAT_WORKERS:-2}', --limit-concurrency, '256', --backlog, '256', --timeout-keep-alive, '45', --timeout-graceful-shutdown, '30', --proxy-headers, --forwarded-allow-ips, '${ECHAT_TRUSTED_PROXIES:-127.0.0.1}', --no-access-log]
+    ports: ["${ECHAT_BIND:-127.0.0.1}:${ECHAT_PORT:-3080}:8080"]
+    volumes: ["media_data:/app/data"]
+    depends_on:
+      db: {condition: service_healthy}
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs: [/tmp]
+    networks: [private]
+  caddy:
+    image: caddy:2-alpine
+    profiles: [standalone]
+    restart: unless-stopped
+    environment:
+      ECHAT_HOST: ${ECHAT_HOST:?Run scripts/init.py first}
+    ports: ['80:80', '443:443', '443:443/udp']
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [api]
+    networks: [private]
+networks:
+  private: {}
+volumes:
+  postgres_data: {}
+  media_data: {}
+  caddy_data: {}
+  caddy_config: {}

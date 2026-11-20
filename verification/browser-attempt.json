@@ -1,0 +1,7 @@
+[
+  {
+    "check": "browser test exception",
+    "status": "failed",
+    "error": "Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:18080/\nCall log:\n  - navigating to \"http://127.0.0.1:18080/\", waiting until \"load\"\n"
+  }
+]

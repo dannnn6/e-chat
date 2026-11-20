@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#153c36"><title>E-chat</title><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/app.css"><script src="/app.js" defer></script></head>
+<body>
+<section id="auth" class="auth-wrap">
+  <div class="auth-card"><div class="brand"><span class="brand-icon">E</span><div><h1>E-chat</h1><p>Меньше сети. Больше связи.</p></div></div>
+  <p class="intro">Личные чаты, группы и каналы без номера телефона. Ключ восстановления — единственный способ перенести аккаунт.</p>
+  <div class="tabs"><button id="tab-register" class="selected">Новый аккаунт</button><button id="tab-recover">Восстановление</button></div>
+  <form id="auth-form">
+    <label id="name-field">Ваше имя<input id="display-name" maxlength="80" value="" autocomplete="nickname" required></label>
+    <label id="invite-field">Приглашение владельца сервера<input id="registration-invite" autocomplete="off" required></label>
+    <label>Название этого устройства<input id="device-name" maxlength="80" value="Моё устройство" required></label>
+    <label id="recovery-field" hidden>Ключ восстановления<textarea id="recovery-input" rows="5" spellcheck="false" autocomplete="off" placeholder="ECHAT1.…"></textarea></label>
+    <label id="revoke-field" class="check" hidden><input id="revoke-others" type="checkbox">Выйти на всех остальных устройствах</label>
+    <button id="auth-submit" class="primary" type="submit">Создать ключ</button>
+  </form>
+  <p class="small">Пилот 0.1. Сервер может читать сообщения: сквозное шифрование пока не реализовано. Храните ключ отдельно от устройства.</p></div>
+</section>
+<main id="main" hidden>
+  <aside id="sidebar"><header class="sidebar-head"><div class="brand compact"><span class="brand-icon">E</span><h1>E-chat</h1></div><button id="settings" title="Аккаунт и устройства" aria-label="Настройки">⚙</button></header>
+    <div class="network-line"><button id="edge-toggle" class="edge">E-режим</button><span id="network-state">Подключение…</span></div>
+    <div class="new-actions"><button id="new-direct">Новый чат</button><button id="new-space" title="Группа, канал или приглашение">＋</button></div>
+    <label class="filter-label"><span class="sr-only">Фильтр диалогов</span><input id="chat-filter" placeholder="Найти диалог" type="search"></label>
+    <div id="conversation-list" role="list"></div><footer id="sidebar-footer">Текст — первым. Файлы — по запросу.</footer>
+  </aside>
+  <section id="conversation"><div id="empty-state"><span class="empty-mark">E</span><h2>Связь начинается с сообщения</h2><p>Выберите диалог или начните новый по ID.<br>Всё отправленное без сети останется в очереди.</p></div>
+    <div id="chat-content" hidden><header class="chat-head"><button id="back" aria-label="Назад к диалогам">‹</button><div class="chat-heading"><h2 id="chat-title"></h2><p id="chat-subtitle"></p></div><button id="search" aria-label="Поиск в диалоге">Поиск</button><button id="chat-menu" aria-label="Меню диалога">⋮</button></header>
+    <div id="message-list" aria-label="Сообщения"><button id="older">Загрузить предыдущие</button><div id="messages"></div></div>
+    <button id="jump-bottom" hidden>К новым сообщениям ↓</button>
+    <div id="compose-context" hidden><span id="context-text"></span><button id="cancel-context" aria-label="Отменить ответ или редактирование">×</button></div>
+    <div id="file-preview" hidden></div>
+    <form id="compose"><button type="button" id="attach" title="Прикрепить файлы">＋</button><input id="files" type="file" multiple hidden><label class="compose-input"><span class="sr-only">Сообщение</span><textarea id="message-input" rows="1" maxlength="4096" placeholder="Сообщение…"></textarea></label><button type="submit" id="send" class="primary">Отправить</button></form>
+    <div id="readonly" hidden>В этом канале могут публиковать только администраторы.</div></div>
+  </section>
+</main>
+<dialog id="dialog"><div id="dialog-body"></div><form method="dialog"><button class="dialog-close">Закрыть</button></form></dialog><div id="toast" role="status" hidden></div>
+</body></html>
